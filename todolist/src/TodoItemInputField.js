@@ -1,7 +1,19 @@
-import React from "react";
+import { useState } from "react";
+import TextField from "@mui/material/TextField";
 
 const TodoItemInputField = (props) => {
-  return <div>TodoItemInputField</div>;
+  const [input, setInput] = useState("");
+  return (
+    <div>
+      <TextField
+        id="todo-item-input"
+        label="Todo Item"
+        variant="outlined"
+        onChange={(e) => setInput(e.target.value)}
+        value={input}
+      />
+    </div>
+  );
 };
 
 export default TodoItemInputField;
