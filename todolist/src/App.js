@@ -4,7 +4,7 @@ import TodoItemInputField from "./TodoItemInputField";
 const App = () => {
   return (
     <div className="App">
-      <TodoItemInputField />
+      <TodoItemInputField onSubmit={() => {}} />
     </div>
   );
 };
