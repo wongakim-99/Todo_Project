@@ -1,9 +1,14 @@
 import React from "react";
 
 const TodoItem = (props) => {
+  const style = props.todoItem.isFinished
+    ? { textDecoration: "line-through" }
+    : {};
   return (
     <li>
-      <span>{props.todoItem.todoItemContent}</span>
+      <span style={style} onClick={() => props.onTodoItemClick(props.todoItem)}>
+        {props.todoItem.todoItemContent}
+      </span>
     </li>
   );
 };

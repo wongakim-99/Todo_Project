@@ -19,10 +19,29 @@ const App = () => {
     ]);
   };
 
+  const onTodoItemClick = (clickedTodoItem) => {
+    setTodoItemList(
+      todoItemList.map((todoItem) => {
+        if (clickedTodoItem.id === todoItem.id) {
+          return {
+            id: clickedTodoItem.id,
+            todoItemContent: clickedTodoItem.todoItemContent,
+            isFinished: !clickedTodoItem.isFinished,
+          };
+        } else {
+          return todoItem;
+        }
+      })
+    );
+  };
+
   return (
     <div className="App">
       <TodoItemInputField onSubmit={onSubmit} />
-      <TodoItemList todoItemList={todoItemList} />
+      <TodoItemList
+        todoItemList={todoItemList}
+        onTodoItemClick={onTodoItemClick}
+      />
     </div>
   );
 };
