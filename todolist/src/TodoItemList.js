@@ -1,8 +1,9 @@
 import React from "react";
+import TodoItem from "./TodoItem";
 
 const TodoItemList = (props) => {
   const todoList = props.todoItemList.map((todoItem, index) => {
-    return <li key={index}>{todoItem.todoItemContent}</li>;
+    return <TodoItem key={index} todoItem={todoItem} />;
   });
   return (
     <div>
