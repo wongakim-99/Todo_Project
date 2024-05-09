@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div className="App">
       <TodoItemInputField onSubmit={() => {}} />
-      <TodoItemList />
+      <TodoItemList todoItemList={[]} />
     </div>
   );
 };
