@@ -35,12 +35,21 @@ const App = () => {
     );
   };
 
+  const onRemoveClick = (removedTodoItem) => {
+    setTodoItemList(
+      todoItemList.filter((todoItem) => {
+        return todoItem.id !== removedTodoItem.id;
+      })
+    );
+  };
+
   return (
     <div className="App">
       <TodoItemInputField onSubmit={onSubmit} />
       <TodoItemList
         todoItemList={todoItemList}
         onTodoItemClick={onTodoItemClick}
+        onRemoveClick={onRemoveClick}
       />
     </div>
   );

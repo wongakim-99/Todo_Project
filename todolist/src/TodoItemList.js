@@ -8,6 +8,7 @@ const TodoItemList = (props) => {
         key={index}
         todoItem={todoItem}
         onTodoItemClick={props.onTodoItemClick}
+        onRemoveClick={props.onRemoveClick}
       />
     );
   });
