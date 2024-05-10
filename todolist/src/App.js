@@ -6,6 +6,7 @@ import { useState } from "react";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,16 +26,29 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-let todoItemId = 0;
+const db = getFirestore(app);
 
 const App = () => {
   const [todoItemList, setTodoItemList] = useState([]);
 
-  const onSubmit = (newTodoItem) => {
+  const onSubmit = async (newTodoItem) => {
+    // 함수 내에서 await를 하기 위해서는 async를 해야됨
+    /**todoItem이 추가될 때마다 데이터베이스에 작성
+     * 기존에는 front base에만 업데이트를 했었지만 이제 firebase의 database에 아래의 내용을 작성*/
+    const docRef = await addDoc(collection(db, "todoItem"), {
+      //await : firebase에 저장을 하면 오래 걸리는 시간을 기다림
+      //addDoc : firebase에 쓰라는 의미
+      /**뭘 쓰라는 걸까? -> 인자로 전달된 db와todoItem을 보면된다.
+       * 데이터 베이스에 todoItem이라는 컬렉션을 아래 두줄과 같은 JSON을 추가하라는 의미*/
+      todoItemContent: newTodoItem,
+      isFinished: false,
+    });
+    /***************************************************************************************/
     setTodoItemList([
+      //위에서 firebase에 쓰고나서 frontend state에 아래와 같이 업데이트
       ...todoItemList,
       {
-        id: todoItemId++,
+        id: docRef.id,
         todoItemContent: newTodoItem,
         isFinished: false,
       },
