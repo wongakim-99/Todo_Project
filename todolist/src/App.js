@@ -14,6 +14,8 @@ import {
   doc,
   deleteDoc,
   getDocs,
+  query,
+  orderBy,
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -51,7 +53,9 @@ const App = () => {
   /***************************************************************************************/
 
   const syncTodoItemListStateWithFirestore = () => {
-    getDocs(collection(db, "todoItem")).then((QuerySnapshot) => {
+    const q = query(collection(db, "todoItem"), orderBy("createdTime", "desc"));
+
+    getDocs(q).then((QuerySnapshot) => {
       const firestoreTodoItemList = [];
       QuerySnapshot.forEach((doc) => {
         firestoreTodoItemList.push({
