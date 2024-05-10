@@ -40,14 +40,14 @@ const App = () => {
   const [todoItemList, setTodoItemList] = useState([]);
 
   /***************************************************************************************/
-  /**firestore를 업데이트 하는 이벤트가 3가지
+  /** firestore를 업데이트 하는 이벤트가 3가지
    * 1. 새로운 아이템이 추가되었을 때
    * 2. isFinished를 할때
    * 3. 데이터를 지울 때
    * 이 이벤트를 진행할때마다 firestore에 이벤트를 보내고 우리가 front state를 바꿔준다.
    * 그러나 위와 같이 관리할 경우 굉장히 관리하기가 힘들어짐;;(나중에 state가 잘못되었을 때 헷갈릴수 있음)
    * 그래서 dataflow를 좀 더 수월하게 관리하기 위해 firestore가 업데이트 될 때마다 다시 firestore에서 다 읽어와서
-   * 우리 state를 업데이트 하는 방식으로 진행*/
+   * 우리 state를 업데이트 하는 방식으로 진행 */
   /***************************************************************************************/
 
   const syncTodoItemListStateWithFirestore = () => {
@@ -58,6 +58,7 @@ const App = () => {
           id: doc.id,
           todoItemContent: doc.data().todoItemContent,
           isFinished: doc.data().isFinished,
+          createdTime: doc.data().createdTime ?? 0, //todo Item의 time stamp를 추가된 순서대로 보여줌
         });
       });
       setTodoItemList(firestoreTodoItemList);
@@ -79,6 +80,7 @@ const App = () => {
        * 데이터 베이스에 todoItem이라는 컬렉션을 아래 두줄과 같은 JSON을 추가하라는 의미*/
       todoItemContent: newTodoItem,
       isFinished: false,
+      createdTime: Math.floor(Date.now() / 1000),
     });
     syncTodoItemListStateWithFirestore();
   };
