@@ -70,6 +70,7 @@ const App = () => {
           todoItemContent: doc.data().todoItemContent,
           isFinished: doc.data().isFinished,
           createdTime: doc.data().createdTime ?? 0, //todo Item의 time stamp를 추가된 순서대로 보여줌
+          userId: doc.data().userId, //Todo아이템에 user id 추기
         });
       });
       setTodoItemList(firestoreTodoItemList);
@@ -92,6 +93,7 @@ const App = () => {
       todoItemContent: newTodoItem,
       isFinished: false,
       createdTime: Math.floor(Date.now() / 1000),
+      userId: currentUser,
     });
     syncTodoItemListStateWithFirestore();
   };
