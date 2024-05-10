@@ -1,7 +1,7 @@
 import "./App.css";
 import TodoItemInputField from "./TodoItemInputField";
 import TodoItemList from "./TodoItemList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -13,6 +13,7 @@ import {
   setDoc,
   doc,
   deleteDoc,
+  getDocs,
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -37,6 +38,20 @@ const db = getFirestore(app);
 
 const App = () => {
   const [todoItemList, setTodoItemList] = useState([]);
+
+  useEffect(() => {
+    getDocs(collection(db, "todoItem")).then((QuerySnapshot) => {
+      const firestoreTodoItemList = [];
+      QuerySnapshot.forEach((doc) => {
+        firestoreTodoItemList.push({
+          id: doc.id,
+          todoItemContent: doc.data().todoItemContent,
+          isFinished: doc.data().isFinished,
+        });
+      });
+      setTodoItemList(firestoreTodoItemList);
+    });
+  }, []);
 
   const onSubmit = async (newTodoItem) => {
     // 함수 내에서 await를 하기 위해서는 async를 해야됨
