@@ -17,6 +17,7 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import TodoListAppBar from "./TodoListAppBar";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -107,6 +108,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <TodoListAppBar />
       <TodoItemInputField onSubmit={onSubmit} />
       <TodoItemList
         todoItemList={todoItemList}
