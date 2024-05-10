@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+//import { getAnalytics } from "firebase/analytics";
 import {
   getFirestore,
   collection,
@@ -18,11 +18,8 @@ import {
   orderBy,
 } from "firebase/firestore";
 import TodoListAppBar from "./TodoListAppBar";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDzGzhVvNxftVUbxCLudMG6apP5auR56ls",
   authDomain: "todolist-f0d54.firebaseapp.com",
@@ -35,12 +32,21 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
+//const analytics = getAnalytics(app);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const App = () => {
+  const [currentUser, setCurrentUser] = useState(null);
   const [todoItemList, setTodoItemList] = useState([]);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setCurrentUser(user.uid);
+    } else {
+      setCurrentUser(null);
+    }
+  });
 
   /***************************************************************************************/
   /** firestore를 업데이트 하는 이벤트가 3가지
@@ -108,7 +114,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <TodoListAppBar />
+      <TodoListAppBar currentUser={currentUser} />
       <TodoItemInputField onSubmit={onSubmit} />
       <TodoItemList
         todoItemList={todoItemList}
