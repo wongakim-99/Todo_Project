@@ -17,7 +17,7 @@ const TodoItemInputField = (props) => {
       <Stack direction="row" spacing={2} justifyContent="center">
         <TextField
           id="todo-item-input"
-          label="Todo Item"
+          label="오늘의 일정추가"
           variant="outlined"
           onChange={(e) => setInput(e.target.value)}
           value={input}

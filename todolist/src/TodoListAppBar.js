@@ -52,7 +52,7 @@ const TodoListAppBar = (props) => {
     <AppBar position="static">
       <Toolbar sx={{ width: "100%", maxWidth: 720, margin: "auto" }}>
         <Typography variant="h6" component="div">
-          Todo List App
+          오늘의 일정
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         {button}
