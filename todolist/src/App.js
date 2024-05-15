@@ -16,12 +16,11 @@ import {
   getDocs,
   query,
   orderBy,
+  where,
 } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import TodoListAppBar from "./TodoListAppBar";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDzGzhVvNxftVUbxCLudMG6apP5auR56ls",
   authDomain: "todolist-f0d54.firebaseapp.com",
@@ -35,11 +34,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const App = () => {
+  const [currentUser, setCurrentUser] = useState(null);
   const [todoItemList, setTodoItemList] = useState([]);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setCurrentUser(user.uid);
+    } else {
+      setCurrentUser(null);
+    }
+  });
 
   /***************************************************************************************/
   /** firestore를 업데이트 하는 이벤트가 3가지
@@ -53,7 +61,11 @@ const App = () => {
   /***************************************************************************************/
 
   const syncTodoItemListStateWithFirestore = () => {
-    const q = query(collection(db, "todoItem"), orderBy("createdTime", "desc"));
+    const q = query(
+      collection(db, "todoItem"),
+      where("userId", "==", currentUser),
+      orderBy("createdTime", "desc")
+    );
 
     getDocs(q).then((QuerySnapshot) => {
       const firestoreTodoItemList = [];
@@ -63,6 +75,7 @@ const App = () => {
           todoItemContent: doc.data().todoItemContent,
           isFinished: doc.data().isFinished,
           createdTime: doc.data().createdTime ?? 0, //todo Item의 time stamp를 추가된 순서대로 보여줌
+          userId: doc.data().userId, //Todo아이템에 user id 추기
         });
       });
       setTodoItemList(firestoreTodoItemList);
@@ -71,7 +84,7 @@ const App = () => {
 
   useEffect(() => {
     syncTodoItemListStateWithFirestore();
-  }, []);
+  }, [currentUser]);
 
   const onSubmit = async (newTodoItem) => {
     // 함수 내에서 await를 하기 위해서는 async를 해야됨
@@ -85,6 +98,7 @@ const App = () => {
       todoItemContent: newTodoItem,
       isFinished: false,
       createdTime: Math.floor(Date.now() / 1000),
+      userId: currentUser,
     });
     syncTodoItemListStateWithFirestore();
   };
@@ -107,6 +121,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <TodoListAppBar currentUser={currentUser} />
       <TodoItemInputField onSubmit={onSubmit} />
       <TodoItemList
         todoItemList={todoItemList}
