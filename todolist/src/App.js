@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-//import { getAnalytics } from "firebase/analytics";
+import { getAnalytics } from "firebase/analytics";
 import {
   getFirestore,
   collection,
@@ -16,6 +16,7 @@ import {
   getDocs,
   query,
   orderBy,
+  where,
 } from "firebase/firestore";
 import TodoListAppBar from "./TodoListAppBar";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
@@ -32,7 +33,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-//const analytics = getAnalytics(app);
+const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
@@ -60,7 +61,11 @@ const App = () => {
   /***************************************************************************************/
 
   const syncTodoItemListStateWithFirestore = () => {
-    const q = query(collection(db, "todoItem"), orderBy("createdTime", "desc"));
+    const q = query(
+      collection(db, "todoItem"),
+      where("userId", "==", currentUser),
+      orderBy("createdTime", "desc")
+    );
 
     getDocs(q).then((QuerySnapshot) => {
       const firestoreTodoItemList = [];
@@ -79,7 +84,7 @@ const App = () => {
 
   useEffect(() => {
     syncTodoItemListStateWithFirestore();
-  }, []);
+  }, [currentUser]);
 
   const onSubmit = async (newTodoItem) => {
     // 함수 내에서 await를 하기 위해서는 async를 해야됨
