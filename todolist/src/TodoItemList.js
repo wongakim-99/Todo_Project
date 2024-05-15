@@ -1,5 +1,7 @@
 import React from "react";
 import TodoItem from "./TodoItem";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
 
 const TodoItemList = (props) => {
   const todoList = props.todoItemList.map((todoItem, index) => {
@@ -13,9 +15,9 @@ const TodoItemList = (props) => {
     );
   });
   return (
-    <div>
-      <ul>{todoList}</ul>
-    </div>
+    <Box>
+      <List sx={{ margin: "auto", maxWidth: 720 }}>{todoList}</List>
+    </Box>
   );
 };
 

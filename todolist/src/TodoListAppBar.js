@@ -1,4 +1,4 @@
-import { AppBar, Typography, Toolbar } from "@mui/material";
+import { AppBar, Typography, Toolbar, Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import React from "react";
 import { initializeApp } from "firebase/app";
@@ -50,10 +50,11 @@ const TodoListAppBar = (props) => {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Toolbar sx={{ width: "100%", maxWidth: 720, margin: "auto" }}>
+        <Typography variant="h6" component="div">
           Todo List App
         </Typography>
+        <Box sx={{ flexGrow: 1 }} />
         {button}
       </Toolbar>
     </AppBar>

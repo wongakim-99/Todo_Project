@@ -2,6 +2,7 @@ import "./App.css";
 import TodoItemInputField from "./TodoItemInputField";
 import TodoItemList from "./TodoItemList";
 import { useEffect, useState } from "react";
+import Container from "@mui/material/Container";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -122,12 +123,14 @@ const App = () => {
   return (
     <div className="App">
       <TodoListAppBar currentUser={currentUser} />
-      <TodoItemInputField onSubmit={onSubmit} />
-      <TodoItemList
-        todoItemList={todoItemList}
-        onTodoItemClick={onTodoItemClick}
-        onRemoveClick={onRemoveClick}
-      />
+      <Container sx={{ paddingTop: 3 }}>
+        <TodoItemInputField onSubmit={onSubmit} />
+        <TodoItemList
+          todoItemList={todoItemList}
+          onTodoItemClick={onTodoItemClick}
+          onRemoveClick={onRemoveClick}
+        />
+      </Container>
     </div>
   );
 };
